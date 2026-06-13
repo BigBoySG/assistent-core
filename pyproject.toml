@@ -1,5 +1,5 @@
 [project]
-name = "assistanc-core"
+name = "assistant-core"
 version = "0.1.0"
 description = "Core package for personal assistant"
 requires-python = ">=3.11"
