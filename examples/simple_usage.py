@@ -8,11 +8,11 @@ print("Создана задача:")
 print(task)
 
 print("\nВсе задачи:")
-for item in assistant.tasks.get_list():
+for item in assistant.tasks.get_all():
     print(f"- {item.title} [{item.status.value}]")
 
 assistant.tasks.complete(task.id)
 
 print("\nПосле завершения:")
-for item in assistant.tasks.get_list():
+for item in assistant.tasks.get_all():
     print(f"- {item.title} [{item.status.value}]")
