@@ -15,6 +15,7 @@ class Task:
     priority: TaskPriority = TaskPriority.MEDIUM
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: datetime | None = None
+    updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def __post_init__(self) -> None:
         if self.title.strip() == "":
@@ -47,17 +48,20 @@ class Task:
 
     def reopen(self) -> None:
         self.status = TaskStatus.ACTIVE
+        self.updated_at = datetime.now(timezone.utc)
         self.completed_at = None
 
     def cancel(self) -> None:
         if self.status == TaskStatus.DONE:
             raise InvalidTaskOperationError("Cannot cancel completed task")
+        self.updated_at = datetime.now(timezone.utc)
         self.status = TaskStatus.CANCELLED
 
     def rename(self, new_name: str) -> None:
         self._ensure_editable()
         if not new_name.strip():
             raise InvalidTaskOperationError("Task name cannot be empty")
+        self.updated_at = datetime.now(timezone.utc)
         self.title = new_name.strip()
 
     def change_description(self, new_description: str | None = None) -> None:
@@ -68,10 +72,12 @@ class Task:
         if new_description.strip() == "":
             self.description = None
             return
+        self.updated_at = datetime.now(timezone.utc)
         self.description = new_description.strip()
 
     def change_priority(self, new_priority: TaskPriority) -> None:
         self._ensure_editable()
         if not isinstance(new_priority, TaskPriority):
             raise InvalidTaskOperationError("Task priority must be of type TaskPriority")
+        self.updated_at = datetime.now(timezone.utc)
         self.priority = new_priority
