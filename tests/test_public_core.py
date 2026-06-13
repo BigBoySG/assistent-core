@@ -26,5 +26,5 @@ def test_public_core_instances_do_not_share_memory_storage():
 
     first_core.tasks.create("Task in first core")
 
-    assert len(first_core.tasks.list()) == 1
-    assert second_core.tasks.list() == []
+    assert len(first_core.tasks.get_list()) == 1
+    assert second_core.tasks.get_list() == []

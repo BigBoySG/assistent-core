@@ -26,7 +26,7 @@ def test_task_api_lists_tasks(task_api):
     task_1 = task_api.create("Task 1")
     task_2 = task_api.create("Task 2")
 
-    tasks = task_api.list()
+    tasks = task_api.get_list()
 
     assert task_1 in tasks
     assert task_2 in tasks
@@ -40,7 +40,7 @@ def test_task_api_returns_active_tasks(task_api):
     task_api.complete(completed_task.id)
     task_api.cancel(cancelled_task.id)
 
-    active_tasks = task_api.active()
+    active_tasks = task_api.get_active()
 
     assert active_task in active_tasks
     assert completed_task not in active_tasks
@@ -53,7 +53,7 @@ def test_task_api_deletes_task(task_api):
     deleted_task = task_api.delete(task.id)
 
     assert deleted_task == task
-    assert task_api.list() == []
+    assert task_api.get_list() == []
 
 
 def test_task_api_clears_tasks(task_api):
@@ -62,7 +62,7 @@ def test_task_api_clears_tasks(task_api):
 
     task_api.clear()
 
-    assert task_api.list() == []
+    assert task_api.get_list() == []
 
 
 def test_task_api_completes_task(task_api):

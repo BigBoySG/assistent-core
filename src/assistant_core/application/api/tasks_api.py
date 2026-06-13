@@ -20,10 +20,10 @@ class TasksApi:
     def get(self, task_id: str) -> Task:
         return self._task_service.get_task(task_id)
 
-    def list(self) -> list[Task]:
+    def get_list(self) -> list[Task]:
         return self._task_service.get_all_tasks()
 
-    def active(self) -> list[Task]:
+    def get_active(self) -> list[Task]:
         return self._task_service.get_active_tasks()
 
     def delete(self, task_id: str) -> Task:
