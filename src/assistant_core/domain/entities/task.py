@@ -15,13 +15,16 @@ class Task:
     priority: TaskPriority = TaskPriority.MEDIUM
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: datetime | None = None
-    updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime | None = None
 
     def __post_init__(self) -> None:
         if self.title.strip() == "":
             raise InvalidTaskOperationError("Title cannot be empty")
 
         self.title = self.title.strip()
+
+        if self.updated_at is None:
+            self.updated_at = self.created_at
 
         if self.description is not None:
             self.description = self.description.strip() or None
@@ -31,6 +34,9 @@ class Task:
 
         if not isinstance(self.priority, TaskPriority):
             raise InvalidTaskOperationError("Task priority must be of type TaskPriority")
+
+    def _touch(self) -> None:
+        self.updated_at = datetime.now(timezone.utc)
 
     def _ensure_editable(self) -> None:
         if self.status == TaskStatus.DONE:
@@ -44,40 +50,43 @@ class Task:
         if self.status == TaskStatus.DONE:
             return
         self.status = TaskStatus.DONE
-        self.completed_at = datetime.now(timezone.utc)
+
+        now = datetime.now(timezone.utc)
+        self.completed_at = now
+        self.updated_at = now
 
     def reopen(self) -> None:
         self.status = TaskStatus.ACTIVE
-        self.updated_at = datetime.now(timezone.utc)
+        self._touch()
         self.completed_at = None
 
     def cancel(self) -> None:
         if self.status == TaskStatus.DONE:
             raise InvalidTaskOperationError("Cannot cancel completed task")
-        self.updated_at = datetime.now(timezone.utc)
+        self._touch()
         self.status = TaskStatus.CANCELLED
 
     def rename(self, new_name: str) -> None:
         self._ensure_editable()
         if not new_name.strip():
             raise InvalidTaskOperationError("Task name cannot be empty")
-        self.updated_at = datetime.now(timezone.utc)
+        self._touch()
         self.title = new_name.strip()
 
     def change_description(self, new_description: str | None = None) -> None:
         self._ensure_editable()
+        self._touch()
         if new_description is None:
             self.description = None
             return
         if new_description.strip() == "":
             self.description = None
             return
-        self.updated_at = datetime.now(timezone.utc)
         self.description = new_description.strip()
 
     def change_priority(self, new_priority: TaskPriority) -> None:
         self._ensure_editable()
         if not isinstance(new_priority, TaskPriority):
             raise InvalidTaskOperationError("Task priority must be of type TaskPriority")
-        self.updated_at = datetime.now(timezone.utc)
+        self._touch()
         self.priority = new_priority
