@@ -13,7 +13,7 @@ def test_service_creates_task(task_service):
 
     assert task.title == "Buy milk"
     assert task.description == "After work"
-    assert task.priority == TaskPriority.HIGH
+    assert task.priority == TaskPriority.HIGH.value
     assert task.status == TaskStatus.ACTIVE
 
 
@@ -127,4 +127,4 @@ def test_service_changes_task_priority(task_service):
 
     changed_task = task_service.change_task_priority(task.id, TaskPriority.HIGH)
 
-    assert changed_task.priority == TaskPriority.HIGH
+    assert changed_task.priority == TaskPriority.HIGH.value

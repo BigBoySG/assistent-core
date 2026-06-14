@@ -20,7 +20,7 @@ def test_create_task(service: TaskService):
     assert task.title == "Купить батарейки"
     assert task.description is None
     assert task.status == TaskStatus.ACTIVE
-    assert task.priority == TaskPriority.MEDIUM
+    assert task.priority == TaskPriority.MEDIUM.value
     assert task.completed_at is None
 
 
@@ -39,7 +39,7 @@ def test_create_task_with_description_and_priority(service: TaskService):
 
     assert task.title == "Купить батарейки"
     assert task.description == "Для робота"
-    assert task.priority == TaskPriority.HIGH
+    assert task.priority == TaskPriority.HIGH.value
 
 
 def test_create_task_with_empty_title_raises_error(service: TaskService):
@@ -291,7 +291,7 @@ def test_change_task_priority(service: TaskService):
 
     changed_task = service.change_task_priority(task.id, TaskPriority.HIGH)
 
-    assert changed_task.priority == TaskPriority.HIGH
+    assert changed_task.priority == TaskPriority.HIGH.value
 
 
 def test_change_task_priority_to_invalid_value_raises_error(service: TaskService):
@@ -306,7 +306,7 @@ def test_change_done_task_priority_raises_error(service: TaskService):
     service.complete_task(task.id)
 
     with pytest.raises(InvalidTaskOperationError):
-        service.change_task_priority(task.id, TaskPriority.HIGH)
+        service.change_task_priority(task.id, TaskPriority.HIGH.value)
 
 
 def test_change_cancelled_task_priority_raises_error(service: TaskService):
@@ -314,9 +314,9 @@ def test_change_cancelled_task_priority_raises_error(service: TaskService):
     service.cancel_task(task.id)
 
     with pytest.raises(InvalidTaskOperationError):
-        service.change_task_priority(task.id, TaskPriority.HIGH)
+        service.change_task_priority(task.id, TaskPriority.HIGH.value)
 
 
 def test_change_unknown_task_priority_raises_error(service: TaskService):
     with pytest.raises(TaskNotFoundError):
-        service.change_task_priority("unknown-id", TaskPriority.HIGH)
+        service.change_task_priority("unknown-id", TaskPriority.HIGH.value)

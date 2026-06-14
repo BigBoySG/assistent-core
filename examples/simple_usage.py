@@ -9,10 +9,10 @@ print(task)
 
 print("\nВсе задачи:")
 for item in assistant.tasks.get_all():
-    print(f"- {item.title} [{item.status.value}]")
+    print(f"- {item.title} [{item.status}]")
 
 assistant.tasks.complete(task.id)
 
 print("\nПосле завершения:")
 for item in assistant.tasks.get_all():
-    print(f"- {item.title} [{item.status.value}]")
+    print(f"- {item.title} [{item.status}]")

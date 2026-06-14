@@ -11,7 +11,7 @@ def test_task_is_created_with_default_values():
     assert task.title == "Buy milk"
     assert task.description is None
     assert task.status == TaskStatus.ACTIVE
-    assert task.priority == TaskPriority.MEDIUM
+    assert task.priority == TaskPriority.MEDIUM.value
     assert task.completed_at is None
     assert task.id
     assert task.created_at is not None
@@ -152,7 +152,7 @@ def test_task_priority_can_be_changed():
 
     task.change_priority(TaskPriority.HIGH)
 
-    assert task.priority == TaskPriority.HIGH
+    assert task.priority == TaskPriority.HIGH.value
 
 
 def test_task_priority_must_be_task_priority_enum():
