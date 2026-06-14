@@ -10,8 +10,8 @@ def test_task_api_creates_task(task_api):
 
     assert task.title == "Buy milk"
     assert task.description == "After work"
-    assert task.priority == TaskPriority.HIGH
-    assert task.status == TaskStatus.ACTIVE
+    assert task.priority == TaskPriority.HIGH.value
+    assert task.status == TaskStatus.ACTIVE.value
 
 
 def test_task_api_gets_task_by_id(task_api):
